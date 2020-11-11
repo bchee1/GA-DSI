@@ -34,8 +34,9 @@ The average age is 63 years old, with the gender split being about roughly even.
 
 ## Scripts
 
-|Description	|Script	|
-|Data Generator for test/train/validation sets|pneumo_data_generator.py|
+Description	|Script	
+---	|---	
+Data Generator for test/train/validation sets|pneumo_data_generator.py
 
 Data link for trained model and images can be found at:
 https://drive.google.com/drive/folders/1y0uSCpKi06vf-EbmnIjeGIhTRHb54ESD?usp=sharing
@@ -56,6 +57,7 @@ Optimizer used was Adam with a learning rate of 0.01. The main metric used for m
 
 ## Results (Convolutional Neural Network)
 |Model	|Train Score|Validation Score|Test Score|No. of Params| Training Time|
+|---	|---	|---|---|---|---|
 |CNN|0.8044|0.8111|0.7930|60,940,898|17min|
 |VGG16|0.8044|0.8111|0.7962|15,238,018|32 min|
 |ResNet50|0.8041|0.8111|0.8050|25,678,786|47 min|
