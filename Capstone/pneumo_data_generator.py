@@ -44,6 +44,7 @@ class DataGenerator(keras.utils.Sequence):
         self.indexes = np.arange(len(data_frame.index))
         # Path for image files if not in default ./img folder
         self.path_to_img = path_to_img
+        print('hi')
 
     def __len__(self):
         ''' Returns the number of batches per epoch '''
@@ -54,11 +55,13 @@ class DataGenerator(keras.utils.Sequence):
         # Take the id's of the batch number "index"
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
 
+
         # Batch initialization
         X, Y = [], []
 
         # For each index,the sample and the label is taken. Then the batch is appended
         for idx in indexes:
+            
             # Image and idx index tag is get
             x, y = self.get_sample(idx)
             # This image to the batch is added
@@ -77,7 +80,8 @@ class DataGenerator(keras.utils.Sequence):
         '''Returns the sample and the label with the id passed as a parameter'''
         # Get the row from the dataframe corresponding to the index "idx"                                                                       
         df_row = self.df.iloc[idx]
-        image = Image.open(os.path.join(self.path_to_img,df_row["ImageID"]))                                                                        
+        image = Image.open(os.path.join(self.path_to_img,df_row["ImageID"]))
+        #print(os.path.join(self.path_to_img,df_row["ImageID"]))                                                                       
         image = image.resize((self.x,self.x))
         image = np.asarray(image)
         label = dict_classes[df_row["group"]]
@@ -85,6 +89,7 @@ class DataGenerator(keras.utils.Sequence):
         img2=np.array(image_resampled)    
         img2.setflags(write=1)                                                                                                                     
         img2 = self.norm(img2)
+        #print('hi')
         # Return the resized image and the label                                                                                                
         return img2, label
 

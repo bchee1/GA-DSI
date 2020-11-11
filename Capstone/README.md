@@ -3,78 +3,64 @@
 ## Background
 During the COVID-19 pandemic, healthcare professionals were pressed to diagnose and treat patients with severe pneumonia in high numbers that stretched hospital bed capacity. Chest X-rays became one of the diagnostic tools to help in confirming such a diagnosis, and formed large corpa of data. 
 
-One such dataset is the
+One such dataset is the BIMCV-COVID-19
 https://github.com/BIMCV-CSUSP/BIMCV-COVID-19
-In October 2017, the National Institute of Health open sourced 112,000+ images of chest chest x-rays. Now known as ChestXray14, this dataset was opened in order to allow clinicians to make better diagnostic decisions for patients with various lung diseases.
+
+The dataset has over 20000 images from patients who were either suspected of, or had pneumonia over the course of their visit
 
 ## Table of Contents
-Objective
+Problem Statement
 Dataset
 Exploratory Data Analysis
-Pipeline
 Preprocessing
-Model (Structured Data)
 Model (Convolutional Neural Network)
-Explanations
 References
 
 ## Problem Statement
 Train a useful convolutional neural network to detect and classify pneumonia in patients.
 
 ## Dataset
-The ChestXray14 dataset consists of both images and structured data.
+The BIMCV-COVID-19 dataset consists of both images and structured data.
 
-The image dataset consists of 112,000+ images, which consist of 30,000 patients. Some patients have multiple scans, which will be taken into consideration. All images are originally 1024 x 1024 pixels.
+The image dataset consists of 20000+ images, which consist of 13114 patients.
+All images are originally 2823 x 2593 pixels, but have been resized to 524x524 pixels.
 
-Due to data sourcing & corruption issues, my image dataset consists of 10,000 of the original 112,000 images. All data is used for the structured model.
-
-Additionally, structured data is also given to us for each image. This dataset includes features such as age, number of follow up visits, AP vs PA scan, and the patient gender.
+Additionally, structured data is also given to us for each image, including features such as age of patient, gender, diagnoses of disease, machine data for the x-rays and so forth.
 
 ## Exploratory Data Analysis
-When researching the labels, there are 709 original, unique categories present. On further examination, the labels are hierarchical. For example, some labels are only "Emphysema", while others are "Emphysema | Cardiac Issues".
+Most of the features are based on how the X-rays were taken, with regard to the projection of the images, types of machines used, exposure time etc.
 
-The average age is 58 years old. However, about 400 patients are labeled as months, 1 of them is labeled in days.
+The average age is 63 years old, with the gender split being about roughly even. Target variable split of patients experiencing pneumonia was also 0.25.
 
-## Pipeline
-Two pipelines were created for each dataset. Each script is labeled as either "Structured" or "CNN", which indicates which data pipeline the script is part of.
+## Scripts
 
-Description	Script	Model
-EDA	eda.py	Structured
-Resize Images	resize_images.py	CNN
-Reconcile Labels	reconcile_labels.py	CNN
-Convert Images to Arrays	image_to_array.py	CNN
-CNN Model	cnn.py	CNN
-Structured Data Model	model.py	Structured
-Preprocessing
-First, the labels were changed to reflect single categories, as opposed to the hierarchical categorical labels in the original data set. This reduces the number of categories from 709 to 15 categories. The label reduction takes its queue from the Stanford data scientists, who reduced the labels in the same way.
+|Description	|Script	|
+|Data Generator for test/train/validation sets|pneumo_data_generator.py|
 
-Irrelevant columns were also removed. These columns either had zero variance, or provided minimal information on the patient diagnosis.
+Data link for trained model and images can be found at:
+https://drive.google.com/drive/folders/1y0uSCpKi06vf-EbmnIjeGIhTRHb54ESD?usp=sharing
 
-Finally, anyone whose age was given in months (M) or days (D) was removed. The amount of data removed is minimal, and does not affect the analysis.
+### Preprocessing
 
-## Model (Structured Data)
-The structured data is trained using a gradient boosted classifier. The random forest classifier was also used. When comparing the results, both were nearly equal. The GBM classifier was used due to its speed over the random forest, and due to producing equal or better results to the random forest.
+First, the label 'Group' was one hot encoded to reflect only, as opposed to the hierarchical categorical labels in the original data set. None of the other features were taken into the CNN nets other than the images themselves, as well as the target variable.
 
-## Results (Structured Data)
-Measurement	Score
-Model	H2O Gradient Boosting Estimator
-Log Loss	1.670
-MSE	0.510
-RMSE	0.714
-R^2	0.967
-Mean Per-Class Error	0.933
-Model (Convolutional Neural Network)
-The CNN was trained using Keras, with the TensorFlow backend.
+## CNN Model
+4 CNN models were explored
+- CNN with 3 convolution layers
+- VGG16 with Dropout
+- ResNet50 with Dropout
+- InceptionNet with Dropout
 
-The model is similar to the VGG architectures; 2 to 3 convolution layers are used in each set of layers, followed by a pooling layer.
+Optimizer used was Adam with a learning rate of 0.01. The main metric used for model tuning and evaluation was accuracy, due to the relative balanced nature of the classes.
 
-Dropout is used in the fully connected layers only, which slightly improved the results.
 
 ## Results (Convolutional Neural Network)
-Measurement	Score
-Accuracy	0.5456
-Precision	0.306
-Recall	0.553
-F1
+|Model	|Train Score|Validation Score|Test Score|No. of Params| Training Time|
+|CNN|0.8044|0.8111|0.7930|60,940,898|17min|
+|VGG16|0.8044|0.8111|0.7962|15,238,018|32 min|
+|ResNet50|0.8041|0.8111|0.8050|25,678,786|47 min|
+|InceptionNet|0.8042 |0.8111|0.8045|55,221,090|1h|
 
 ## References
+https://github.com/BIMCV-CSUSP/BIMCV-COVID-19
+https://cv-tricks.com/cnn/understand-resnet-alexnet-vgg-inception/
