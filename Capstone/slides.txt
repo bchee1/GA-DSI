@@ -1,0 +1,11 @@
+intro
+
+cnn
+vgg16 
+resnet50 25,678,786 params,6 min
+inceptionnet v2 55,221,090 params, 22 min
+
+model comparison including score, weights, weights file size, time to train
+
+gpus
+

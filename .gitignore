@@ -1,0 +1,7 @@
+
+*.png
+*.hdf5
+*.zip
+*.hdf5-acc
+*.hdf5-last
+*.hdf5-loss
