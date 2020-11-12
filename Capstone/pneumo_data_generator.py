@@ -44,32 +44,32 @@ class DataGenerator(keras.utils.Sequence):
         self.indexes = np.arange(len(data_frame.index))
         # Path for image files if not in default ./img folder
         self.path_to_img = path_to_img
-        print('hi')
 
     def __len__(self):
         ''' Returns the number of batches per epoch '''
         return int(np.ceil(len(self.indexes) / self.batch_size))
 
-    def __getitem__(self, index):
+    def __getitem__(self, index): #***key function for this class***
         ''' Returns a batch of data (the batches are indexed) '''
         # Take the id's of the batch number "index"
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
-
-
         # Batch initialization
         X, Y = [], []
 
         # For each index,the sample and the label is taken. Then the batch is appended
         for idx in indexes:
-            
+    
             # Image and idx index tag is get
             x, y = self.get_sample(idx)
             # This image to the batch is added
             X.append(x)
             Y.append(y)
+
             
-	# The created batch is returned
-        return np.array(X), np.array(Y) #X:(batch_size, y, x), y:(batch_size, n_labels_types)
+    	# The created batch is returned
+        #print(X)
+        return np.array(X), np.array(Y) 
+        #X:(batch_size, y, x), y:(batch_size, n_labels_types)
 
     def on_epoch_end(self):
         ''' Triggered at the end of each epoch '''
@@ -77,6 +77,7 @@ class DataGenerator(keras.utils.Sequence):
             np.random.shuffle(self.indexes) # Shuffles the data
 
     def get_sample(self, idx):
+
         '''Returns the sample and the label with the id passed as a parameter'''
         # Get the row from the dataframe corresponding to the index "idx"                                                                       
         df_row = self.df.iloc[idx]
@@ -89,7 +90,7 @@ class DataGenerator(keras.utils.Sequence):
         img2=np.array(image_resampled)    
         img2.setflags(write=1)                                                                                                                     
         img2 = self.norm(img2)
-        #print('hi')
+
         # Return the resized image and the label                                                                                                
         return img2, label
 
