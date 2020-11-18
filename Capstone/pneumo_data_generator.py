@@ -55,6 +55,7 @@ class DataGenerator(keras.utils.Sequence):
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
         # Batch initialization
         X, Y = [], []
+        
 
         # For each index,the sample and the label is taken. Then the batch is appended
         for idx in indexes:
@@ -68,6 +69,7 @@ class DataGenerator(keras.utils.Sequence):
             
     	# The created batch is returned
         #print(X)
+        #print(Y)
         return np.array(X), np.array(Y) 
         #X:(batch_size, y, x), y:(batch_size, n_labels_types)
 
@@ -88,7 +90,7 @@ class DataGenerator(keras.utils.Sequence):
         label = dict_classes[df_row["group"]]
         image_resampled = np.reshape(image,image.shape + (self.target_channels,))
         img2=np.array(image_resampled)    
-        img2.setflags(write=1)                                                                                                                     
+        img2.setflags(write=1)          ##Aligning to prevent data leakage in case images mess up                                                                                                            
         img2 = self.norm(img2)
 
         # Return the resized image and the label                                                                                                
