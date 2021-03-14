@@ -1,0 +1,25 @@
+SELECT plays.id, plays.title, sum(reservations.number_of_tickets) 
+FROM plays
+LEFT JOIN reservations
+on 'plays.id' = 'reservations.play_id'
+Order By sum(reservations.number_of_tickets) desc;
+
+
+SELECT reservations.play_id, plays.title, sum(reservations.number_of_tickets) 
+FROM reservations
+LEFT JOIN plays
+on reservations.play_id=plays.id
+GROUP BY play_id
+Order By sum(reservations.number_of_tickets) desc, reservations.play_id asc;
+
+SELECT buses.id AS ID, IFNULL(count(passengers.id),0) AS passengers_on_board
+
+GROUP BY
+
+
+SELECT buses.id AS ID, 
+    IFNULL(count(case when  passengers.origin= buses.origin
+                        AND passengers.destination= buses.destination
+                        AND time(passengers.time between t
+    ),0) AS passengers_on_board 
+FROM buses;
